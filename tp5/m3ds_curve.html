@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="hevea 2.06">
+<style type="text/css">
+.li-itemize{margin:1ex 0ex;}
+.li-enumerate{margin:1ex 0ex;}
+.dd-description{margin:0ex 0ex 1ex 4ex;}
+.dt-description{margin:0ex;}
+.toc{list-style:none;}
+.footnotetext{margin:0ex; padding:0ex;}
+div.footnotetext P{margin:0px; text-indent:1em;}
+.thefootnotes{text-align:left;margin:0ex;}
+.dt-thefootnotes{margin:0em;}
+.dd-thefootnotes{margin:0em 0em 0em 2em;}
+.footnoterule{margin:1em auto 1em 0px;width:50%;}
+.caption{padding-left:2ex; padding-right:2ex; margin-left:auto; margin-right:auto}
+.title{margin:2ex auto;text-align:center}
+.titlemain{margin:1ex 2ex 2ex 1ex;}
+.titlerest{margin:0ex 2ex;}
+.center{text-align:center;margin-left:auto;margin-right:auto;}
+.flushleft{text-align:left;margin-left:0ex;margin-right:auto;}
+.flushright{text-align:right;margin-left:auto;margin-right:0ex;}
+div table{margin-left:inherit;margin-right:inherit;margin-bottom:2px;margin-top:2px}
+td table{margin:auto;}
+table{border-collapse:collapse;}
+td{padding:0;}
+.cellpadding0 tr td{padding:0;}
+.cellpadding1 tr td{padding:1px;}
+pre{text-align:left;margin-left:0ex;margin-right:auto;}
+blockquote{margin-left:4ex;margin-right:4ex;text-align:left;}
+td p{margin:0px;}
+.boxed{border:1px solid black}
+.textboxed{border:1px solid black}
+.vbar{border:none;width:2px;background-color:black;}
+.hbar{border:none;height:2px;width:100%;background-color:black;}
+.hfill{border:none;height:1px;width:200%;background-color:black;}
+.vdisplay{border-collapse:separate;border-spacing:2px;width:auto; empty-cells:show; border:2px solid red;}
+.vdcell{white-space:nowrap;padding:0px; border:2px solid green;}
+.display{border-collapse:separate;border-spacing:2px;width:auto; border:none;}
+.dcell{white-space:nowrap;padding:0px; border:none;}
+.dcenter{margin:0ex auto;}
+.vdcenter{border:solid #FF8000 2px; margin:0ex auto;}
+.minipage{text-align:left; margin-left:0em; margin-right:auto;}
+.marginpar{border:solid thin black; width:20%; text-align:left;}
+.marginparleft{float:left; margin-left:0ex; margin-right:1ex;}
+.marginparright{float:right; margin-left:1ex; margin-right:0ex;}
+.theorem{text-align:left;margin:1ex auto 1ex 0ex;}
+.part{margin:2ex auto;text-align:center}
+.lstlisting{font-family:monospace;white-space:pre;margin-right:auto;margin-left:0pt;text-align:left}
+</style>
+
+<link rel="stylesheet" href="m3ds_curve_fichiers/prog3d.css" type="text/css">
+<title>m3ds_curve</title>
+</head>
+<body>
+<!--HEVEA command line is: /usr/bin/hevea -entities style.hva m3ds_curve.tex -o m3ds_curve.html -->
+<!--CUT STYLE article--><!--CUT DEF section 1 --><table style="border-spacing:6px;border-collapse:separate;" class="cellpading0"><tbody><tr><td style="text-align:center;white-space:nowrap"><img src="m3ds_curve_fichiers/univ-lille1_petite.png"> </td></tr>
+<tr><td style="text-align:center;white-space:nowrap"><span style="font-weight:bold">MS2 Info</span> 2013-2014</td></tr>
+</tbody></table><div class="center"><span style="font-weight:bold"><span style="font-size:large">M3DS
+</span></span></div><p>
+<br>
+<br>
+</p><div class="center"><span style="font-size:x-large"><span style="font-weight:bold">TP 05 : Courbes</span></span></div><p><br>
+
+<span style="color:#004CFF"><span style="font-weight:bold"><u>Exercice&nbsp;1. Introduction</u></span></span><br>
+
+
+</p><ul class="itemize"><li class="li-itemize">
+Reprenez <a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/curve.zip">curve.zip</a> sur le portail.
+</li><li class="li-itemize">Testez le squelette : vous pouvez saisir 
+deux points et deux normales (avec click droit), et bouger les points 
+déjà saisis avec click gauche (il faut être assez proche des points).
+</li></ul><p><br>
+
+<span style="color:#004CFF"><span style="font-weight:bold"><u>Exercice&nbsp;2. Courbe de Hermite</u></span></span><br>
+
+</p><p><span style="color:blue"><span style="font-weight:bold">Question&nbsp;1. </span></span>
+Complétez <code>Hermite::eval(t)</code> pour évaluer la courbe de hermite <span style="font-style:italic">P</span>(<span style="font-style:italic">t</span>) : les points extrémités sont les attributs <code>_a</code> et <code>_b</code>, et les tangentes en ces points sont <code>_ta</code> et <code>_tb</code>.
+ Il s’agit donc de donner les bonnes valeurs aux 16 coefficients de la 
+matrice (tous initialisés à 0 dans le squelette) puis calculer </p><table class="display dcenter"><tbody><tr style="vertical-align:middle"><td class="dcell"><span style="font-style:italic">P</span>(<span style="font-style:italic">t</span>)=(<span style="font-style:italic">t</span><sup>3</sup>&nbsp;<span style="font-style:italic">t</span><sup>2</sup>&nbsp;<span style="font-style:italic">t</span>&nbsp;1)<span style="font-style:italic">M</span></td><td class="dcell">⎛<br>
+⎜<br>
+⎜<br>
+⎜<br>
+⎝</td><td class="dcell"><table style="border-spacing:6px;border-collapse:separate;" class="cellpading0"><tbody><tr><td style="text-align:center;white-space:nowrap"><span style="font-style:italic">a</span>&nbsp;</td></tr>
+<tr><td style="text-align:center;white-space:nowrap"><span style="font-style:italic">b</span>&nbsp;</td></tr>
+<tr><td style="text-align:center;white-space:nowrap"><span style="font-style:italic">t</span><sub><span style="font-style:italic">a</span></sub>&nbsp;</td></tr>
+<tr><td style="text-align:center;white-space:nowrap"><span style="font-style:italic">t</span><sub><span style="font-style:italic">b</span></sub>&nbsp;</td></tr>
+</tbody></table></td><td class="dcell">⎞<br>
+⎟<br>
+⎟<br>
+⎟<br>
+⎠</td></tr>
+</tbody></table><p> (sur les <code>Vector3</code>, vous pouvez utiliser les opérateurs usuels : <span style="font-style:italic">p</span>3=<span style="font-style:italic">p</span>1+<span style="font-style:italic">p</span>2, <span style="font-style:italic">p</span>2=0.3*<span style="font-style:italic">p</span>1, etc) .</p><p>Vous ne pouvez pas encore tester car il faut répondre à la question qui suit pour afficher la courbe.</p><p><span style="color:blue"><span style="font-weight:bold">Question&nbsp;2. </span></span>
+Complétez <code>Hermite::draw()</code> : il suffit de donner un nombre suffisant de points pour tracer la courbe.</p><p><span style="font-weight:bold">Testez</span>.</p><div class="center">
+<a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/img/hermite1.jpg"><img src="m3ds_curve_fichiers/hermite1.jpg"></a>
+</div><p><br>
+
+<span style="color:#004CFF"><span style="font-weight:bold"><u>Exercice&nbsp;3. Courbe de Bezier</u></span></span><br>
+
+
+Pour faire cet exercice il faut cliquer sur le bouton "Bezier". Vous 
+pouvez maintenant saisir (click gauche) des points représentant un 
+polygone de contrôle.</p><p>On travaille à présent dans <code>Curve.cpp</code>.</p><p><span style="color:blue"><span style="font-weight:bold">Question&nbsp;1. </span></span>
+On se préoccupe de <code>Curve::evalBezier(float t)</code>. Les points de contrôle saisis à la souris sont déjà recopiés dans le tableau <code>castel</code> de <code>Vector3</code> : <code>castel[i]</code> vous donne donc le point de contrôle <span style="font-style:italic">P</span>(<span style="font-style:italic">i</span>). Il vous suffit alors d’appliquer l’algorithme triangulaire de De Casteljau vu en cours, en faisant évoluer le tableau <code>castel</code> (on rappelle la relation <span style="font-style:italic">P</span><sub><span style="font-style:italic">i</span></sub><sup><span style="font-style:italic">j</span></sup>=(1−<span style="font-style:italic">t</span>)<span style="font-style:italic">P</span><sub><span style="font-style:italic">i</span></sub><sup><span style="font-style:italic">j</span>−1</sup>+<span style="font-style:italic">tP</span><sub><span style="font-style:italic">i</span>+1</sub><sup><span style="font-style:italic">j</span>−1</sup>).</p><p>Visualisez
+ et testez (vous pouvez déplacer les points de contrôle saisis avec 
+click gauche). Familiarisez vous avec la forme des Béziers (constatez le
+ contrôle global, les tangentes aux extrémités, etc; constatez aussi la 
+complexité lorsqu’on a de nombreux points de contrôles).</p><div class="center">
+<a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/img/courbe1.jpg"><img src="m3ds_curve_fichiers/courbe1.jpg"></a>
+</div><p><br>
+
+<span style="color:#004CFF"><span style="font-weight:bold"><u>Exercice&nbsp;4. Courbe d’interpolation</u></span></span><br>
+
+
+On travaille à présent dans <code>CatmullRomCurve.cpp</code>. Il s’agit de relier 2 points successifs (saisis à la souris, et accessibles par les getters <code>point(i)</code> et <code>point(i+1)</code>), par une courbe de Bézier cubique. </p><p>Lorsque
+ vous cliquer sur "Bezier Interpolation" vous pouvez saisir, avec click 
+gauche, les points de la courbe (des points intermédiaires, en bleu, 
+sont ajoutés automatiquement : ils serviront à définir la Bézier cubique
+ entre 2 points saisis). Vous pouvez contrôler la position de chaque 
+point avec click gauche.</p><p>Dans la classe <code>CatmullRomCurve</code> vous accédez aux points saisis (les rouges) par <code>point(i)</code> et vous obtenez les points intermédiaires (les bleus) par <code>intermediate(i,0)</code> et <code>intermediate(i,1)</code> (les deux points intermédiaires entre <code>point(i)</code> et <code>point(i+1)</code>) : ils sont tous de type <code>Vector3</code>.</p><p><span style="color:blue"><span style="font-weight:bold">Question&nbsp;1. </span></span>
+Vous devez compléter <code>CatmullRomCurve::draw()</code> : l’approche suggérée est de tracer une courbe de Bézier pour chaque couple (<span style="font-style:italic">p</span>(<span style="font-style:italic">i</span>),<span style="font-style:italic">p</span>(<span style="font-style:italic">i</span>+1)).</p><p>Testez : n’oubliez pas de faire bouger les points intermédiaires jaunes pour constater leur influence sur la forme de la courbe.</p><table style="border-spacing:6px;border-collapse:separate;" class="cellpading0"><tbody><tr><td style="text-align:center;white-space:nowrap">
+<div class="minipage">
+
+<div class="center">
+<a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/img/interpolation1.jpg"><img src="m3ds_curve_fichiers/interpolation1.jpg"></a>
+</div>
+
+</div>
+</td><td style="text-align:center;white-space:nowrap">
+<div class="minipage">
+
+<div class="center">
+<a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/img/interpolation2.jpg"><img src="m3ds_curve_fichiers/interpolation2.jpg"></a>
+</div>
+
+</div>
+
+</td></tr>
+</tbody></table><p><span style="color:blue"><span style="font-weight:bold">Question&nbsp;2. </span></span>
+On désire offrir un placement automatique des points intermédiaires. 
+Appliquez la méthode de Catmull-Rom (affectation des points 
+intermédiaires pour avoir une tangente parallèle à (<span style="font-style:italic">point</span>(<span style="font-style:italic">i</span>+1)−<span style="font-style:italic">point</span>(<span style="font-style:italic">i</span>−1)) dans la méthode <code>CatmullRomCurve::setup()</code> : vous devez y affecter tous les points intermédiaires; l’affectation se fait avec les setters <code>this-&gt;intermediate(i,0,un_Vector3)</code> et <code>this-&gt;intermediate(i,1,un_Vector3)</code>. Pour tester il suffit de cliquer sur "Catmull-Rom" (appel de la méthode <code>CatmullRom::setup()</code>).</p><table style="border-spacing:6px;border-collapse:separate;" class="cellpading0"><tbody><tr><td style="text-align:center;white-space:nowrap">
+<div class="minipage">
+
+<div class="center">
+<a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/img/rom1.jpg"><img src="m3ds_curve_fichiers/rom1.jpg"></a>
+</div>
+
+</div>
+</td><td style="text-align:center;white-space:nowrap">
+<div class="minipage">
+
+<div class="center">
+<a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/img/rom2.jpg"><img src="m3ds_curve_fichiers/rom2.jpg"></a>
+</div>
+
+</div>
+
+</td></tr>
+</tbody></table><p><br>
+
+<span style="color:#004CFF"><span style="font-weight:bold"><u>Exercice&nbsp;5. Suivi de trajectoire</u></span></span><br>
+
+
+L’objectif est de faire suivre la caméra selon la courbe d’interpolation. Pour cela on calcule le repère mobile (<span style="font-style:italic">T</span>,<span style="font-style:italic">B</span>,<span style="font-style:italic">N</span>) défini sur la courbe d’interpolation de l’exercice précédent (cf cours). </p><p><span style="color:blue"><span style="font-weight:bold">Question&nbsp;1. </span></span>
+Il faut calculer la dérivée (le vecteur vitesse) et la dérivée seconde 
+(vecteur accélération) d’une courbe de bézier. Pour simplifier, on 
+suppose que la courbe de bézier est cubique (ce qui correspond à la 
+courbe d’interpolation de l’exercice précédent). Il faut compléter <code>Curve::evalCubicVelocity</code> et <code>Curve::evalCubicAcceleration</code> (notez que <code>Curve::evalCubicBezier</code> pour le calcul des points est déjà faite juste au dessus : vous pouvez vous en inspirer).</p><p><span style="font-weight:bold">Testez</span>
+ : saisissez une courbe d’interpolation puis cliquez sur le bouton 
+"switch TBN" (les vecteurs T, B et N sont calculés à partir de la 
+dérivée et dérivée seconde comme indiqué dans le cours). <span style="font-weight:bold">Constatez</span> le "flip" éventuel de l’accélération (induit un changement discontinu brutal du sens du vecteur <span style="font-style:italic">N</span>).</p><table style="border-spacing:6px;border-collapse:separate;" class="cellpading0"><tbody><tr><td style="text-align:center;white-space:nowrap">
+<div class="minipage">
+
+<div class="center">
+<a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/img/flip1.jpg"><img src="m3ds_curve_fichiers/flip1.jpg"></a>
+</div>
+
+</div>
+</td><td style="text-align:center;white-space:nowrap">
+<div class="minipage">
+
+<div class="center">
+<a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/img/flip2.jpg"><img src="m3ds_curve_fichiers/flip2.jpg"></a>
+</div>
+
+</div>
+
+</td></tr>
+</tbody></table><p><span style="color:blue"><span style="font-weight:bold">Question&nbsp;2. </span></span>
+Pour que la caméra suive la trajectoire, on est confronté à 2 problèmes :
+</p><ul class="itemize"><li class="li-itemize">
+Le flip brutal du vecteur bi-normal.
+</li><li class="li-itemize">Les catmull-rom ne sont pas <span style="font-style:italic">C</span><sup>2</sup> (discontinuité de l’accélération aux points de jonction).
+</li></ul><p>Pour contrer ces points : on force à conserver une 
+binormale sans changement brutal (on change le signe si on détecte un 
+tel changement), et pour l’accélération on se contente d’une 
+interpolation linéaire de l’accélération aux points de jonction (plutôt 
+que de calculer l’accélération en chaque point de la courbe). Ces 
+corrections sont déjà assurées par le squelette. Pour constater le 
+résultat, cliquez sur le bouton "Roller" (les points de la courbe sont 
+saisis en dur dans <code>RollerCoaster::RollerCoaster()</code>), puis cliquer sur "switch TBN".</p><p><span style="color:blue"><span style="font-weight:bold">Question&nbsp;3. </span></span>
+Pour que la caméra suive la trajectoire on récupère directement le changement de repère <span style="font-style:italic">M</span><sub><span style="font-style:italic">world</span> → <span style="font-style:italic">tbn</span></sub> par <code>_rollerCoaster.frame(t)</code>
+ (donne une matrice 4x4 : elle est obtenue simplement en initialisant 
+les colonnes de la matrice avec les vecteurs (t,b,n,position); cf 
+cours). Il reste à affecter <code>_camera.position(???)</code> et <code>_camera.orientation(???)</code>. <span style="font-weight:bold">Faites le</span> dans <code>GLApplication::updateCamera</code> dans le bloc <code>if (_followRoller)</code>. <span style="font-weight:bold">Testez</span> (il faut cliquer sur "Roller" puis "Camera on Curve") : </p><p><a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/video/follow.webm">
+</a></p><div class="minipage"><a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/video/follow.webm">
+
+<div class="center">
+<img src="m3ds_curve_fichiers/follow.jpg">
+</div>
+
+</a></div><p><a href="http://www.fil.univ-lille1.fr/%7Eaubert/m3ds/video/follow.webm">
+</a>.</p><!--CUT END -->
+<!--HTMLFOOT-->
+<!--ENDHTML-->
+<!--FOOTER-->
+<hr style="height:2"><blockquote class="quote"><em>Ce document a été traduit de L<sup>A</sup>T<sub>E</sub>X par </em><a href="http://hevea.inria.fr/"><em>H</em><em><span style="font-size:small"><sup>E</sup></span></em><em>V</em><em><span style="font-size:small"><sup>E</sup></span></em><em>A</em></a></blockquote>
+
+</body></html>
