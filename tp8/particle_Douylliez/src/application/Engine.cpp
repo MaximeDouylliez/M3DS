@@ -27,15 +27,25 @@ using namespace p3d;
 
 **/
 void Engine::euler(double dt) {
-  for(unsigned int i=0; i<_particleList->size(); i++) {
-    Particle *p=(*_particleList)[i];
-    if (p->alive()) {
-      /* A COMPLETER : affecter la nouvelle vitesse et la nouvelle position de p avec p->velocity(??), et p->position(??).
+
+    for(unsigned int i=0; i<_particleList->size(); i++) {
+        Particle *p=(*_particleList)[i];
+        if (p->alive()) {
+            /* A COMPLETER : affecter la nouvelle vitesse et la nouvelle position de p avec p->velocity(??), et p->position(??).
       */
+            Vector3 velocity=  p->velocity();
+            Vector3 force =  p->force();
+            Vector3 position   =  p->position();
+            double masse=  p->mass();
 
 
+            Vector3 nextVelocity=velocity+((force/masse)*dt);
+            Vector3   nextPosition=position+(velocity*dt);
+            p->position(nextPosition);
+            p->velocity(nextVelocity);
+
+        }
     }
-  }
 }
 
 
@@ -47,14 +57,14 @@ void Engine::euler(double dt) {
 **/
 
 void Engine::computeForce() {
-  for(unsigned int i=0; i<_particleList->size(); i++) {
-    Particle *p=(*_particleList)[i];
-    if (p->alive()) {
-      /* A COMPLETER : appliquer les forces subies */
+    for(unsigned int i=0; i<_particleList->size(); i++) {
+        Particle *p=(*_particleList)[i];
+        if (p->alive()) {
+            /* A COMPLETER : appliquer les forces subies */
+            p->addForce(Vector3(0,-(p->mass()*9.81),0));
 
-
+        }
     }
-  }
 }
 
 
@@ -65,38 +75,50 @@ void Engine::computeForce() {
 
 **/
 void Engine::collisionPlane() {
-  for(unsigned int j=0; j<_planeList.size(); j++) {
-    Plane *plane=_planeList[j];
+    for(unsigned int j=0; j<_planeList.size(); j++) {
+        Plane *plane=_planeList[j];
 
-    for(unsigned int i=0; i<_particleList->size(); i++) {
-      Particle *p=(*_particleList)[i];
-      if (p->alive()) {
-        Vector3 posCorrection(0,0,0); // correction en position à calculer si collision
-        Vector3 velCorrection(0,0,0); // correction en vitesse à calculer si collision
-        /* A COMPLETER  : détecter collision et corriger vitesse/position */
-        /* on peut utiliser p->position(), p->velocity() (et les setters), et plane->point() et plane->normal() */
-        /* p->radius() donne le rayon de la particule (exercice avec les sphère). */
+        for(unsigned int i=0; i<_particleList->size(); i++) {
+            Particle *p=(*_particleList)[i];
+            if (p->alive()) {
+                Vector3 posCorrection(0,0,0); // correction en position à calculer si collision
+                Vector3 velCorrection(0,0,0); // correction en vitesse à calculer si collision
+                float num,denom,rapport;
+                /* A COMPLETER  : détecter collision et corriger vitesse/position */
+                /* on peut utiliser p->position(), p->velocity() (et les setters), et plane->point() et plane->normal() */
+                /* p->radius() donne le rayon de la particule (exercice avec les sphère). */
 
-        // appliquer les corrections calculées :
-        p->addPositionCorrec(posCorrection);
-        p->addVelocityCorrec(velCorrection);
-      }
+
+                if  ((p->position()-plane->point()).dot(plane->normal())<=0){
+                   // p->addPositionCorrec( -(plane->project(p->position()).));
+                    //p->addVelocityCorrec(-(Vector3(0,0,0)/p->velocity()));
+
+                }
+            }
+        }
+        for(unsigned int i=0; i<_particleList->size(); i++) {
+            Particle *p=(*_particleList)[i];
+            p->positionCorrection();
+            p->velocityCorrection();
+        }
+
+
+
 
     }
-
-  }
 }
+
 
 /** Calcul de l'impulsion entre 2 sphères
 ** - n = normale lors de la collision {\bf normalisée !}
 ** - restititution : > 0.9 superball ;  <0.1 ecrasement
 **/
 double Engine::computeImpulse(Particle *p1, Particle *p2,const Vector3 &n, double restitution) {
-  double res;
-  double v12n=(p2->velocity()-p1->velocity()).dot(n);
-  double inv_mass=1.0/p1->mass()+1.0/p2->mass();
-  res=-(1.0+restitution)*v12n/(inv_mass);
-  return res;
+    double res;
+    double v12n=(p2->velocity()-p1->velocity()).dot(n);
+    double inv_mass=1.0/p1->mass()+1.0/p2->mass();
+    res=-(1.0+restitution)*v12n/(inv_mass);
+    return res;
 
 }
 
@@ -107,31 +129,31 @@ double Engine::computeImpulse(Particle *p1, Particle *p2,const Vector3 &n, doubl
 
 **/
 void Engine::interCollision() {
-  for(unsigned int i=0; i<_particleList->size(); i++) {
-    Particle *p1=(*_particleList)[i];
-    if (p1->alive()) {
-      for(unsigned int j=i+1; j<_particleList->size(); j++) {
-        Particle *p2=(*_particleList)[j];
-        if (p2->alive()) {
-          Vector3 posCorrectionP1(0,0,0); // correction en position de P1
-          Vector3 velCorrectionP1(0,0,0); // correction en vitesse de P1
-          Vector3 posCorrectionP2(0,0,0); // correction en position de P2
-          Vector3 velCorrectionP2(0,0,0); // correction en vitesse de P2
+    for(unsigned int i=0; i<_particleList->size(); i++) {
+        Particle *p1=(*_particleList)[i];
+        if (p1->alive()) {
+            for(unsigned int j=i+1; j<_particleList->size(); j++) {
+                Particle *p2=(*_particleList)[j];
+                if (p2->alive()) {
+                    Vector3 posCorrectionP1(0,0,0); // correction en position de P1
+                    Vector3 velCorrectionP1(0,0,0); // correction en vitesse de P1
+                    Vector3 posCorrectionP2(0,0,0); // correction en position de P2
+                    Vector3 velCorrectionP2(0,0,0); // correction en vitesse de P2
 
-          /* A COMPLETER */
-
-
-          // appliquer la correction éventuelle :
-          p1->addPositionCorrec(posCorrectionP1);
-          p1->addVelocityCorrec(velCorrectionP1);
-          p2->addPositionCorrec(posCorrectionP2);
-          p2->addVelocityCorrec(velCorrectionP2);
+                    /* A COMPLETER */
 
 
+                    // appliquer la correction éventuelle :
+                    p1->addPositionCorrec(posCorrectionP1);
+                    p1->addVelocityCorrec(velCorrectionP1);
+                    p2->addPositionCorrec(posCorrectionP2);
+                    p2->addVelocityCorrec(velCorrectionP2);
+
+
+                }
+            }
         }
-      }
     }
-  }
 
 
 }
@@ -143,26 +165,26 @@ void Engine::interCollision() {
 
 
 Engine::Engine() {
-  //ctor
-  _start=clock();
-  _dt=0.01;
+    //ctor
+    _start=clock();
+    _dt=0.01;
 
-  _particleList=NULL;
-  _windEnable=false;
-//  _boxList=NULL;
+    _particleList=NULL;
+    _windEnable=false;
+    //  _boxList=NULL;
 
 }
 
 Engine::~Engine() {
-  //dtor
+    //dtor
 }
 
 void Engine::addPlane(Plane *p) {
-  _planeList.push_back(p);
+    _planeList.push_back(p);
 }
 
 void Engine::particleList(ParticleList *l) {
-  _particleList=l;
+    _particleList=l;
 }
 
 /*
@@ -172,20 +194,20 @@ void Engine::boxList(BoxList *b) {
 */
 
 void Engine::draw() {
-  _particleList->draw();
-//  _boxList->draw();
+    _particleList->draw();
+    //  _boxList->draw();
 }
 
 
 
 
 void Engine::resetForce() {
-  for(unsigned int i=0; i<_particleList->size(); i++) {
-    Particle *p=(*_particleList)[i];
-    if (p->alive()) {
-      p->resetForce();
+    for(unsigned int i=0; i<_particleList->size(); i++) {
+        Particle *p=(*_particleList)[i];
+        if (p->alive()) {
+            p->resetForce();
+        }
     }
-  }
 }
 
 
@@ -193,18 +215,18 @@ void Engine::resetForce() {
 
 
 void Engine::updatePositionVelocity() {
-  for(unsigned int i=0; i<_particleList->size(); i++) {
-    Particle *p=(*_particleList)[i];
-    if (p->alive()) {
-      p->velocityCorrection();
-      p->positionCorrection();
+    for(unsigned int i=0; i<_particleList->size(); i++) {
+        Particle *p=(*_particleList)[i];
+        if (p->alive()) {
+            p->velocityCorrection();
+            p->positionCorrection();
+        }
     }
-  }
 }
 
 
 int Engine::nbParticle() {
-  return _particleList->nbParticle();
+    return _particleList->nbParticle();
 }
 
 
@@ -218,43 +240,43 @@ int Engine::nbParticle() {
 ** - intégration par euler
 **/
 void Engine::update() {
-  // synchronisation très basique avec le "vrai temps"
-  double elapsed;
-  do {
-    elapsed=double(clock()-_start)/CLOCKS_PER_SEC;
-  } while (elapsed<_dt); // _dt est le pas de temps minimal : attente si pas atteint
-  _start=clock();
+    // synchronisation très basique avec le "vrai temps"
+    double elapsed;
+    do {
+        elapsed=double(clock()-_start)/CLOCKS_PER_SEC;
+    } while (elapsed<_dt); // _dt est le pas de temps minimal : attente si pas atteint
+    _start=clock();
 
-  // réinitialise toutes les forces à 0
-  resetForce();
-  // résolution des collisions (affectation des corrections en vitesse et positions)
-  // avec les plans de la scène :
-  collisionPlane();
+    // réinitialise toutes les forces à 0
+    resetForce();
+    // résolution des collisions (affectation des corrections en vitesse et positions)
+    // avec les plans de la scène :
+    collisionPlane();
     // inter collisions entre toutes les particules :
-  if (!_modeParticle) interCollision();
+    if (!_modeParticle) interCollision();
     // prise en compte des corrections :
-  updatePositionVelocity();
+    updatePositionVelocity();
     // calcul des forces appliquées à chaque particule
-  computeForce();
+    computeForce();
     // calcul des positions/vitesses avec euler explicite
-  euler(elapsed);
+    euler(elapsed);
     // mise à jour des particules (naissances/morts)
-  _particleList->updateLife();
+    _particleList->updateLife();
 
 }
 
 void Engine::modeParticle(bool mode) {
-  _modeParticle=mode;
-  _particleList->modeParticle(mode);
+    _modeParticle=mode;
+    _particleList->modeParticle(mode);
 }
 
 void Engine::enableWind(const p3d::Line &ray) {
-  _wind=ray;
-  _windEnable=true;
+    _wind=ray;
+    _windEnable=true;
 }
 
 void Engine::disableWind() {
-  _windEnable=false;
+    _windEnable=false;
 }
 
 
