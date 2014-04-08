@@ -84,16 +84,18 @@ void Engine::collisionPlane() {
                 Vector3 posCorrection(0,0,0); // correction en position à calculer si collision
                 Vector3 velCorrection(0,0,0); // correction en vitesse à calculer si collision
                 float num,denom,rapport;
+                double vitesseNormale;
                 /* A COMPLETER  : détecter collision et corriger vitesse/position */
                 /* on peut utiliser p->position(), p->velocity() (et les setters), et plane->point() et plane->normal() */
                 /* p->radius() donne le rayon de la particule (exercice avec les sphère). */
 
 
-                if  ((p->position()-plane->point()).dot(plane->normal())<=0){
-                   // p->addPositionCorrec( -(plane->project(p->position()).));
-                    //p->addVelocityCorrec(-(Vector3(0,0,0)/p->velocity()));
-
+               if  ((p->position()+Vector3(0,-p->radius())-plane->point()).dot(plane->normal())<0){
+                    p->addPositionCorrec((1+0.2)*(plane->project(p->position()) - (p->position()+Vector3(0,-p->radius(),0))));
+                    vitesseNormale= p->velocity().dot(plane->normal());
+                   p->addVelocityCorrec((-vitesseNormale*(1+0.2))*plane->normal());
                 }
+
             }
         }
         for(unsigned int i=0; i<_particleList->size(); i++) {
@@ -142,6 +144,17 @@ void Engine::interCollision() {
 
                     /* A COMPLETER */
 
+                    if((p2->position()-p1->position()).length()<(p2->radius()+p1->radius())){
+                     Vector3 N(0,0,0);
+                     N=p2->position()-p1->position();
+                     double j= computeImpulse(p1,p2,N,0.2);
+                     double D=(p2->position()-p1->position()).length()-p2->radius()-p1->radius();
+
+                       posCorrectionP1 =(1+0.2)*(p2->mass()/(p1->mass()+p2->mass()))*D*(N/(N.dot(N)));
+                      velCorrectionP1=-((j/p1->mass())*N);
+                      posCorrectionP2=Vector3 (0,0,0)-(1+0.2)*(p1->mass()/(p1->mass()+p2->mass()))*D*(N/(N.dot(N)));
+                       velCorrectionP2=((j/p2->mass())*N);
+                     }
 
                     // appliquer la correction éventuelle :
                     p1->addPositionCorrec(posCorrectionP1);

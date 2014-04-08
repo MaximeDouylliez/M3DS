@@ -29,7 +29,7 @@ GLApplication::GLApplication() {
 
 
 
-  _particleList.birthRate(10);
+  _particleList.birthRate(15);
   _particleList.maxi(2000);
 
 
@@ -42,12 +42,12 @@ GLApplication::GLApplication() {
 
   // des "murs" (non visibles)
 
-  /*
+
   _engine.addPlane(new Plane(Vector3(-4,0,0),Vector3(1,0,0)));
   _engine.addPlane(new Plane(Vector3(4,0,0),Vector3(-1,0,0)));
   _engine.addPlane(new Plane(Vector3(0,0,-4),Vector3(0,0,1)));
   _engine.addPlane(new Plane(Vector3(0,0,4),Vector3(0,0,-1)));
-  */
+
 
 
 
